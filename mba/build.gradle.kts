@@ -26,6 +26,7 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.quarkus:quarkus-jacoco")
+    testImplementation("io.quarkus:quarkus-junit5-mockito")
 }
 
 group = "org.maurycy.framework"
