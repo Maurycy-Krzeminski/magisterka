@@ -7,7 +7,7 @@ option java_outer_classname = "DataProto";
 package data;
 
 // The greeting service definition.
-service DataServiceIF {
+service DataService {
   // Add Data to db
   rpc AddData (AddDataRequest) returns (AddDataReply) {}
   // Get Data from db

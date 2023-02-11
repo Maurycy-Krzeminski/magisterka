@@ -7,7 +7,7 @@ import io.smallrye.mutiny.Uni
 @GrpcService
 class DataServiceGrpcImpl(
     private val dataRepository: DataRepository
-) : DataServiceIF {
+) : DataService {
     override fun addData(request: AddDataRequest): Uni<AddDataReply> {
         return dataRepository.persist(DataDto(request.dataMap))
             .onItem().transform { persistedDataDto ->
@@ -38,5 +38,5 @@ class DataServiceGrpcImpl(
                 .build()
         };
     }
-    
+
 }
