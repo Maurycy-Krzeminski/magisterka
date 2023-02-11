@@ -17,7 +17,7 @@ class DataResourceTest {
     private val map1String = "\"data\":{\"1\":\"a\",\"2\":\"b\",\"3\":\"c\"}"
     private val map2 = mapOf(Pair("4", "d"), Pair("5", "e"), Pair("6", "f"))
     private val map2String = "\"data\":{\"4\":\"d\",\"5\":\"e\",\"6\":\"f\"}"
-
+    private val failedToBuildObjectId  = "{\"error\":\"Failed to build object id exception\"}"
     @Test
     @TestTransaction
     fun getAllTest() {
@@ -36,7 +36,7 @@ class DataResourceTest {
             .get("/aaa")
             .then()
             .statusCode(400)
-            .body(CoreMatchers.`is`("{\"error\":\"Failed to build object id exception\"}"))
+            .body(CoreMatchers.`is`(failedToBuildObjectId))
     }
 
     @Test
@@ -124,5 +124,31 @@ class DataResourceTest {
                 CoreMatchers.containsString("\"id\":\"${body.id}\""),
                 CoreMatchers.containsString(map2String)
             )
+    }
+
+    @Test
+    @TestTransaction
+    fun putDataFailedToBuildObjectIdTest() {
+        RestAssured.given()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(DataInput(map2))
+            .`when`()
+            .put("/aaa")
+            .then()
+            .statusCode(400)
+            .body(CoreMatchers.`is`(failedToBuildObjectId))
+    }
+
+    @Test
+    @TestTransaction
+    fun putDataFailedToFindObjectIdTest() {
+        RestAssured.given()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(DataInput(map2))
+            .`when`()
+            .put("/$hexString")
+            .then()
+            .statusCode(204)
+            .body(CoreMatchers.`is`(""))
     }
 }
