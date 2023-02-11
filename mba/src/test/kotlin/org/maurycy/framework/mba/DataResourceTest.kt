@@ -1,31 +1,26 @@
 package org.maurycy.framework.mba
 
-import io.quarkus.logging.Log
 import io.quarkus.test.TestTransaction
 import io.quarkus.test.common.http.TestHTTPEndpoint
 import io.quarkus.test.junit.QuarkusTest
-import io.quarkus.test.junit.mockito.InjectMock
 import io.restassured.RestAssured
-import java.util.UUID
 import javax.ws.rs.core.MediaType
-import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
 
 @QuarkusTest
 @TestHTTPEndpoint(DataResource::class)
 class DataResourceTest {
     private val hexString = "63e79d0ae5b643052ff92664"
-
+    private val map1 = mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))
+    private val map1String = "\"data\":{\"1\":\"a\",\"2\":\"b\",\"3\":\"c\"}"
+    private val map2 = mapOf(Pair("4", "d"), Pair("5", "e"), Pair("6", "f"))
+    private val map2String = "\"data\":{\"4\":\"d\",\"5\":\"e\",\"6\":\"f\"}"
 
     @Test
     @TestTransaction
     fun getAllTest() {
-        Log.info(1)
         RestAssured.given()
             .`when`().get()
             .then()
@@ -36,7 +31,6 @@ class DataResourceTest {
     @Test
     @TestTransaction
     fun getByIdFailedToBuildObjectIdTest() {
-        Log.info(2)
         RestAssured.given()
             .`when`()
             .get("/aaa")
@@ -61,13 +55,13 @@ class DataResourceTest {
     fun addDataTest() {
         val body = RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))))
+            .body(DataInput(map1))
             .`when`().post()
             .then()
             .statusCode(201)
             .body(
                 CoreMatchers.containsString("id"),
-                CoreMatchers.containsString("\"data\":{\"1\":\"a\",\"2\":\"b\",\"3\":\"c\"}")
+                CoreMatchers.containsString(map1String)
             ).extract().body().`as`(DataDto::class.java)
 
         RestAssured.given()
@@ -77,21 +71,58 @@ class DataResourceTest {
             .statusCode(200)
             .body(
                 CoreMatchers.containsString("\"id\":\"${body.id}\""),
-                CoreMatchers.containsString("\"data\":{\"1\":\"a\",\"2\":\"b\",\"3\":\"c\"}")
+                CoreMatchers.containsString(map1String)
             )
     }
 
     @Test
     @TestTransaction
     fun deleteDataTest() {
-        Log.info(5)
-        TODO()
+        val body = RestAssured.given()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(DataInput(mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))))
+            .`when`().post()
+            .then()
+            .statusCode(201)
+            .body(
+                CoreMatchers.containsString("id"),
+                CoreMatchers.containsString(map1String)
+            ).extract().body().`as`(DataDto::class.java)
+
+        for (i in 1..3) {
+            RestAssured.given()
+                .`when`()
+                .delete("/${body.id}")
+                .then()
+                .statusCode(204)
+                .body(CoreMatchers.`is`(""))
+        }
     }
 
     @Test
     @TestTransaction
     fun putDataTest() {
-        Log.info(6)
-        TODO()
+        val body = RestAssured.given()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(DataInput(map1))
+            .`when`().post()
+            .then()
+            .statusCode(201)
+            .body(
+                CoreMatchers.containsString("id"),
+                CoreMatchers.containsString(map1String)
+            ).extract().body().`as`(DataDto::class.java)
+
+        RestAssured.given()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(DataInput(map2))
+            .`when`()
+            .put("/${body.id}")
+            .then()
+            .statusCode(200)
+            .body(
+                CoreMatchers.containsString("\"id\":\"${body.id}\""),
+                CoreMatchers.containsString(map2String)
+            )
     }
 }

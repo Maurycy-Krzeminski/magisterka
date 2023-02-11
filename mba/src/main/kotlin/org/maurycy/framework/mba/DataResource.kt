@@ -33,8 +33,9 @@ class DataResource(
 
     @DELETE
     @Path("{id}")
-    fun deleteData(@PathParam("id") aId: String): Uni<Boolean> {
-        return dataRepository.deleteById(ObjectId(aId))
+    @ResponseStatus(204)
+    fun deleteData(@PathParam("id") aId: String): Uni<Void> {
+        return dataRepository.deleteById(ObjectId(aId)).replaceWithVoid()
     }
 
     @PUT
@@ -42,12 +43,19 @@ class DataResource(
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     fun putData(@PathParam("id") aId: String, aData: DataInput): Uni<DataDto> {
-        return dataRepository.findById(ObjectId(aId)).map {
-            if (it == null) {
-                throw NullPointerException()
+        try {
+            val id = ObjectId(aId)
+            return dataRepository.findById(id).chain { it ->
+                if (it == null) {
+                    throw FailedToFindByIdException(id = id)
+                }
+                it.data = aData.data
+                return@chain dataRepository.update(it)
             }
-            return@map it
+        } catch (aE: IllegalArgumentException) {
+            throw FailedToBuildObjectIdException()
         }
+
     }
 
     @GET
