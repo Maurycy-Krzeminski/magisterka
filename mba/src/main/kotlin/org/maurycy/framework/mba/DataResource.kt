@@ -12,6 +12,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import org.bson.types.ObjectId
 import org.jboss.resteasy.reactive.ResponseStatus
+import org.maurycy.framework.mba.repository.DataRepository
 
 @Path("/data")
 class DataResource(

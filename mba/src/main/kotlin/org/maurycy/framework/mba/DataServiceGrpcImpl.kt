@@ -3,6 +3,13 @@ package org.maurycy.framework.mba
 import io.quarkus.grpc.GrpcService
 import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.Uni
+import org.maurycy.framework.mba.generated.AddDataReply
+import org.maurycy.framework.mba.generated.AddDataRequest
+import org.maurycy.framework.mba.generated.DataService
+import org.maurycy.framework.mba.generated.GetAllDataRequest
+import org.maurycy.framework.mba.generated.GetDataReply
+import org.maurycy.framework.mba.generated.GetDataRequest
+import org.maurycy.framework.mba.repository.DataRepository
 
 @GrpcService
 class DataServiceGrpcImpl(
@@ -36,7 +43,7 @@ class DataServiceGrpcImpl(
                 .setId(it.id.toString())
                 .putAllData(it.data)
                 .build()
-        };
+        }
     }
 
 }
