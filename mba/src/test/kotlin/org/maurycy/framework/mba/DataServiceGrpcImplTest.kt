@@ -2,7 +2,6 @@ package org.maurycy.framework.mba
 
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import io.quarkus.grpc.GrpcClient
 import io.quarkus.test.junit.QuarkusTest
 import java.time.Duration
 import java.util.concurrent.TimeUnit
