@@ -3,33 +3,17 @@ package org.maurycy.framework.mba
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.quarkus.test.junit.QuarkusTest
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
 
 @QuarkusTest
-class DataServiceGrpcImplTest{
+class DataServiceGrpcImplTest {
 
-    private var channel: ManagedChannel? = null
-    private var dataService: MutinyDataServiceGrpc.MutinyDataServiceStub? = null
-
-    @BeforeEach
-    fun init() {
-        channel = ManagedChannelBuilder.forAddress("localhost", 9001).usePlaintext().build()
-        dataService = MutinyDataServiceGrpc.newMutinyStub(channel)
-    }
-
-    @AfterEach
-    @Throws(InterruptedException::class)
-    fun cleanup() {
-        channel!!.shutdown()
-        channel!!.awaitTermination(10, TimeUnit.SECONDS)
-    }
 
     @Test
     fun addData() {
@@ -37,9 +21,9 @@ class DataServiceGrpcImplTest{
             .putData("2", "b")
             .putData("3", "c")
             .build()
-        dataService!!.addData(addDataRequest).map {
+        dataService!!.addData(addDataRequest).map { reply ->
             try {
-                ObjectId(it.id)
+                ObjectId(reply.id)
             } catch (aE: IllegalArgumentException) {
                 fail(aE)
             }
@@ -49,31 +33,51 @@ class DataServiceGrpcImplTest{
     @Test
     fun getDataById() {
         val data = mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))
-        val addDataRequest = AddDataRequest.newBuilder().putAllData(data)
+        val addDataRequest = AddDataRequest.newBuilder().putAllData(data).build()
 
-            .build()
-        val created = dataService!!.addData(addDataRequest).await().atMost(Duration.ofSeconds(5))
-
-        val getDataRequest = GetDataRequest.newBuilder()
-            .setId(created.id)
-            .build()
-        val response = dataService!!
-            .getDataById(getDataRequest).await().indefinitely()
-
-        assert(response.id == created.id)
-        assert(response.dataMap == data)
+        dataService!!.addData(addDataRequest).invoke { created ->
+            val getDataRequest = GetDataRequest.newBuilder()
+                .setId(created.id)
+                .build()
+            dataService!!
+                .getDataById(getDataRequest).invoke { response ->
+                    assert(response.id == created.id)
+                    assert(response.dataMap == data)
+                }
+        }
     }
 
     @Test
     fun getAllData() {
         val data = mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))
         val addDataRequest = AddDataRequest.newBuilder().putAllData(data).build()
-        val created = dataService!!.addData(addDataRequest).await().atMost(Duration.ofSeconds(5))
-
         val getAllDataRequest = GetAllDataRequest.newBuilder().build()
-        dataService!!.getAllData(getAllDataRequest).map {
-            assert(it.id == created.id)
-            assert(it.dataMap == data)
+        dataService!!.addData(addDataRequest)
+            .invoke { created ->
+                dataService!!.getAllData(getAllDataRequest).invoke { reply ->
+                    assert(reply.id == created.id)
+                    assert(reply.dataMap == data)
+                }
+            }
+    }
+
+    companion object {
+        private var channel: ManagedChannel? = null
+        private var dataService: MutinyDataServiceGrpc.MutinyDataServiceStub? = null
+
+        @JvmStatic
+        @AfterAll
+        @Throws(InterruptedException::class)
+        fun cleanup() {
+            channel!!.shutdown()
+            channel!!.awaitTermination(10, TimeUnit.SECONDS)
+        }
+
+        @JvmStatic
+        @BeforeAll
+        fun init() {
+            channel = ManagedChannelBuilder.forAddress("localhost", 9001).usePlaintext().build()
+            dataService = MutinyDataServiceGrpc.newMutinyStub(channel)
         }
     }
 }
