@@ -1,4 +1,4 @@
-FROM jetbrains/teamcity-agent:latest
+FROM jetbrains/teamcity-agent:2022.10.2-linux-sudo
 
 LABEL maintainer="Maurycy Krzemiński"
 
@@ -19,4 +19,22 @@ ENV JAVA_HOME=/usr/local/java/openjdk
 
 USER buildagent
 # JDK preparation end
+##################################
+
+#enable docker
+
+#USER root
+#RUN usermod -aG docker buildagent
+
+#USER buildagent
+##################################
+
+#install docker compose
+
+USER root
+
+RUN mkdir -p /usr/local/lib/docker/cli-plugins
+RUN curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+RUN chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+#USER buildagent
 ##################################
