@@ -14,6 +14,7 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    implementation("io.quarkus:quarkus-container-image-jib")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-grpc")
