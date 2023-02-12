@@ -1,3 +1,2 @@
-/team-city/agent_conf/*
-/team-city/datadir/*
-/team-city/logs/*
+/team-city/volumes/teamcityAgent/
+/team-city/volumes/teamcityServer/

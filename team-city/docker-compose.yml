@@ -5,14 +5,18 @@ services:
     ports:
       - "8111:8111"
     volumes:
-      - ./datadir:/data/teamcity_server/datadir
-      - ./logs:/opt/teamcity/logs
+      - ./volumes/teamcityServer/datadir:/data/teamcity_server/datadir
+      - ./volumes/teamcityServer/logs:/opt/teamcity/logs
   agent:
-    build: agent
+    build: builds/agent
     volumes:
-      - ./agent_conf:/data/teamcity_agent/conf
-      - ./testcontainersconf:/home/buildagent/
+      - ./volumes/teamcityAgent/agent_conf:/data/teamcity_agent/conf
+      - ./volumes/teamcityAgent/testcontainersconf:/home/buildagent/
     environment:
       - SERVER_URL=http://server:8111
       - DOCKER_IN_DOCKER=start
     privileged: true
+  registry:
+    image: registry:2.8.1
+    ports:
+      - "5000:5000"
