@@ -1,0 +1,30 @@
+version: "3"
+services:
+  traefik:
+    image: traefik:v2.9
+    command: --api.insecure=true --providers.docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "80:80"
+      - "8080:8080"
+
+  dsa:
+    image: localhost:5000/root/dsa:1.0.0-SNAPSHOT
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.http.routers.dsa.rule=Host(`dsa.localhost`)"
+
+  mba:
+    image: localhost:5000/root/mba:1.0.0-SNAPSHOT
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.http.routers.mba.rule=Host(`mba.localhost`)"
+  math:
+    image: localhost:5000/root/math:1.0.0-SNAPSHOT
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.http.routers.math.rule=Host(`math.localhost`)"
