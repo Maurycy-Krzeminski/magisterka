@@ -7,6 +7,7 @@ import org.bson.types.ObjectId
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.maurycy.framework.mba.entities.DataDto
 import org.maurycy.framework.mba.generated.AddDataRequest
 import org.maurycy.framework.mba.generated.GetAllDataRequest
 import org.maurycy.framework.mba.generated.GetDataRequest

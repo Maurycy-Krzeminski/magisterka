@@ -1,4 +1,4 @@
-package org.maurycy.framework.mba
+package org.maurycy.framework.mba.entities
 
 import java.io.Serializable
 

@@ -3,6 +3,7 @@ package org.maurycy.framework.mba
 import io.quarkus.grpc.GrpcService
 import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.Uni
+import org.maurycy.framework.mba.entities.DataDto
 import org.maurycy.framework.mba.generated.AddDataReply
 import org.maurycy.framework.mba.generated.AddDataRequest
 import org.maurycy.framework.mba.generated.DataService

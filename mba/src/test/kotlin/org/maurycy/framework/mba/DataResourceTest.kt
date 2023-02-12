@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.maurycy.framework.mba.entities.DataDto
+import org.maurycy.framework.mba.entities.DataInput
 
 @QuarkusTest
 @TestHTTPEndpoint(DataResource::class)
