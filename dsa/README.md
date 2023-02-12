@@ -52,14 +52,9 @@ If you want to learn more about building native executables, please consult http
 - Micrometer Registry Prometheus ([guide](https://quarkus.io/guides/micrometer)): Enable Prometheus support for Micrometer
 - SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
 - Minio Client extension ([guide](https://quarkiverse.github.io/quarkiverse-docs/quarkus-minio/dev/index.html)): Integrates MinIO Java SDK for Amazon S3 Compatible Cloud Storage
+- Kotlin ([guide](https://quarkus.io/guides/kotlin)): Write your services in Kotlin
 
 ## Provided Code
-
-### gRPC
-
-Create your first gRPC service
-
-[Related guide section...](https://quarkus.io/guides/grpc-getting-started)
 
 ### RESTEasy Reactive
 
