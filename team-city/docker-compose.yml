@@ -11,6 +11,8 @@ services:
     build: agent
     volumes:
       - ./agent_conf:/data/teamcity_agent/conf
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./testcontainersconf:/home/buildagent/
     environment:
       - SERVER_URL=http://server:8111
+      - DOCKER_IN_DOCKER=start
+    privileged: true
