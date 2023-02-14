@@ -17,7 +17,7 @@ class DataServiceGrpcImpl(
     private val dataRepository: DataRepository
 ) : DataService {
     override fun addData(request: AddDataRequest): Uni<AddDataReply> {
-        return dataRepository.persist(DataDto(request.dataMap))
+        return dataRepository.persist(DataDto(data = request.dataMap))
             .onItem().transform { persistedDataDto ->
                 AddDataReply.newBuilder()
                     .setId(persistedDataDto.id.toString())
