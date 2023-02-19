@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.allopen") version "1.7.22"
     kotlin("kapt") version "1.7.22"
     id("io.quarkus")
+    id("org.jetbrains.dokka") version "1.7.20"
     id("org.sonarqube") version "3.5.0.2730"
     id("org.owasp.dependencycheck") version "8.0.2"
 }
