@@ -1,7 +1,10 @@
 plugins {
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.allopen") version "1.7.22"
+    id("org.jetbrains.dokka") version "1.7.20"
     id("io.quarkus")
+    id("org.sonarqube") version "3.5.0.2730"
+    id("org.owasp.dependencycheck") version "8.0.2"
 }
 
 repositories {
@@ -18,11 +21,12 @@ dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-grpc")
-    implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
+    implementation("io.quarkus:quarkus-opentelemetry")
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkiverse.minio:quarkus-minio:2.10.3")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkiverse.quarkus-elasticsearch-reactive:quarkus-elasticsearch-reactive:0.2.0")
+    implementation("io.quarkus:quarkus-logging-gelf")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")

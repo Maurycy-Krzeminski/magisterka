@@ -8,6 +8,7 @@ import io.minio.ListObjectsArgs
 import io.minio.MakeBucketArgs
 import io.minio.MinioClient
 import io.minio.PutObjectArgs
+import io.quarkus.logging.Log
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import java.io.BufferedReader
@@ -32,19 +33,19 @@ class StoreService(
 ) {
     private val bucketName = "test"
 
-    fun storeFiles(formData: FormData): String {
+    fun storeFiles(aFormData: FormData): String {
         createBucket()
-        formData.files?.forEach {
+        aFormData.files?.forEach {
             storeFile(it)
         }
         return "test"
     }
 
-    fun findFile(fileName: String): GetObjectResponse {
+    fun findFile(aFileName: String): GetObjectResponse {
         return minio.getObject(
             GetObjectArgs.builder()
                 .bucket(bucketName)
-                .`object`(fileName)
+                .`object`(aFileName)
                 .build()
         )
     }
@@ -57,8 +58,8 @@ class StoreService(
     }
 
 
-    private fun storeFile(fileUpload: FileUpload) {
-        val inputStream = FileInputStream(fileUpload.filePath().toString())
+    private fun storeFile(aFileUpload: FileUpload) {
+        val inputStream = FileInputStream(aFileUpload.filePath().toString())
         val baos = ByteArrayOutputStream()
         inputStream.transferTo(baos)
         inputStream.close()
@@ -68,12 +69,11 @@ class StoreService(
         val response = minio.putObject(
             PutObjectArgs.builder()
                 .bucket(bucketName)
-                .stream(cloneForMinio, fileUpload.size(), -1)
-                .contentType(fileUpload.contentType())
-                .`object`(fileUpload.fileName())
+                .stream(cloneForMinio, aFileUpload.size(), -1)
+                .contentType(aFileUpload.contentType())
+                .`object`(aFileUpload.fileName())
                 .build()
         )
-        //TODO: index
         val id = response.bucket() + "-" + response.`object`()
         val request = Request(
             "PUT",
@@ -92,20 +92,34 @@ class StoreService(
 
     }
 
-    fun searchByName(name: String): List<StoredContent> {
-        return search("name", name)
+    private val listOfIndex = listOf("content", "bucket", "etag", "name")
+    fun searchFull(aInput: String): List<StoredContent> {
+        val set = mutableSetOf<StoredContent>()
+        set.addAll(search(listOfIndex, aInput))
+        Log.info("set size is: ${set.size}")
+
+        return set.toList()
     }
 
     @Throws(IOException::class)
-    private fun search(term: String, match: String): List<StoredContent> {
+    private fun search(aTerms: List<String>, aMatch: String): List<StoredContent> {
         val request = Request(
             "GET",
             "/minio/_search"
         )
-        //construct a JSON query like {"query": {"match": {"<term>": "<match"}}
-        val termJson = JsonObject().put(term, match)
-        val matchJson = JsonObject().put("match", termJson)
+        val terms = JsonArray()
+        aTerms.forEach {
+            terms.add(it)
+        }
+
+        /**
+         * Query based on:  <a href="URL#https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html">link</a>
+         **/
+        val queryString = JsonObject().put("fields", terms)
+        queryString.put("query", "*$aMatch*")
+        val matchJson = JsonObject().put("query_string", queryString)
         val queryJson = JsonObject().put("query", matchJson)
+        Log.info("query json: ${queryJson.encodePrettily()}")
         request.setJsonEntity(queryJson.encode())
         val response: Response = restClient.performRequest(request)
         val responseBody: String = EntityUtils.toString(response.entity)
@@ -121,6 +135,7 @@ class StoreService(
     }
 
     fun listObjects(): List<String> {
+        createBucket()
         val list: MutableList<String> = mutableListOf()
         minio.listObjects(ListObjectsArgs.builder().bucket(bucketName).build()).forEach {
             list.add(it.get().objectName())

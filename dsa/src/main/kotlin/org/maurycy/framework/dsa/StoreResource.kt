@@ -13,8 +13,8 @@ class StoreResource(
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    fun test(formData: FormData): String {
-        return storeService.storeFiles(formData = formData)
+    fun test(aFormData: FormData): String {
+        return storeService.storeFiles(aFormData = aFormData)
     }
 
     @GET
@@ -22,14 +22,14 @@ class StoreResource(
     @Consumes
     @Produces(MediaType.TEXT_PLAIN)
     @Blocking
-    fun get(@PathParam("name") name: String): Response {
+    fun get(@PathParam("name") aName: String): Response {
         Log.info("searching file")
-        val e = storeService.findFile(fileName = name)
+        val e = storeService.findFile(aFileName = aName)
         Log.info(e)
         return Response.ok(
             e.readAllBytes()
         )
-            .header("Content-Disposition", "attachment;filename=$name")
+            .header("Content-Disposition", "attachment;filename=$aName")
             .header("Content-Type", e.headers().get("Content-Type"))
             .build()
 
@@ -39,7 +39,7 @@ class StoreResource(
     fun getAll() = storeService.listObjects()
 
     @GET
-    @Path("search/{name}")
-    fun getName(@PathParam("name") name: String) = storeService.searchByName(name);
+    @Path("search/{input}")
+    fun getName(@PathParam("input") aParamToSearchBy: String) = storeService.searchFull(aParamToSearchBy)
 
 }
