@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.JoinTable
 import javax.persistence.ManyToMany
 import javax.persistence.Table
-import org.maurycy.framework.auth.RoleDto
+import org.maurycy.framework.auth.model.RoleDto
 
 @Entity
 @Table(name = "user_role")

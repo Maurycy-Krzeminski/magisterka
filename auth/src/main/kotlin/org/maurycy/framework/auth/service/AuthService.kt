@@ -1,4 +1,4 @@
-package org.maurycy.framework.auth
+package org.maurycy.framework.auth.service
 
 import com.password4j.Password
 import io.quarkus.logging.Log
@@ -6,6 +6,10 @@ import io.smallrye.jwt.build.Jwt
 import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.coroutines.awaitSuspending
 import javax.enterprise.context.ApplicationScoped
+import org.maurycy.framework.auth.exception.WrongPassword
+import org.maurycy.framework.auth.model.UserDto
+import org.maurycy.framework.auth.model.UserLogin
+import org.maurycy.framework.auth.model.UserRegister
 import org.maurycy.framework.auth.repository.RoleRepository
 import org.maurycy.framework.auth.repository.UserRepository
 import org.maurycy.framework.auth.table.RoleTable

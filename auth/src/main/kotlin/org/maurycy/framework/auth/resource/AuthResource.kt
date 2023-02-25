@@ -1,8 +1,6 @@
 package org.maurycy.framework.auth.resource
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional
-import io.quarkus.runtime.annotations.RegisterForReflection
 import io.smallrye.mutiny.Uni
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -13,10 +11,11 @@ import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.jboss.resteasy.reactive.RestResponse
 import org.jboss.resteasy.reactive.RestResponse.ResponseBuilder
-import org.maurycy.framework.auth.AuthService
-import org.maurycy.framework.auth.UserDto
-import org.maurycy.framework.auth.UserLogin
-import org.maurycy.framework.auth.UserRegister
+import org.maurycy.framework.auth.model.JWTToken
+import org.maurycy.framework.auth.model.UserDto
+import org.maurycy.framework.auth.model.UserLogin
+import org.maurycy.framework.auth.model.UserRegister
+import org.maurycy.framework.auth.service.AuthService
 
 
 @Path("/api/auth")
@@ -47,6 +46,5 @@ class AuthResource(
         return authService.getAllUsers()
     }
 
-    @RegisterForReflection
-    class JWTToken internal constructor(@field:JsonProperty("id_token") val idToken: String)
+
 }

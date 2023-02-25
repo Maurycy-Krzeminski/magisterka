@@ -1,4 +1,4 @@
-package org.maurycy.framework.auth
+package org.maurycy.framework.auth.model
 
 import org.maurycy.framework.auth.table.RoleTable
 

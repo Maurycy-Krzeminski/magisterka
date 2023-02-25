@@ -1,4 +1,4 @@
-package org.maurycy.framework.auth
+package org.maurycy.framework.auth.model
 
 data class UserRegister(
     var userName: String,

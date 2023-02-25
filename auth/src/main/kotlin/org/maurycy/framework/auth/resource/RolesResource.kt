@@ -5,7 +5,7 @@ import io.smallrye.mutiny.Uni
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
-import org.maurycy.framework.auth.RoleDto
+import org.maurycy.framework.auth.model.RoleDto
 import org.maurycy.framework.auth.repository.RoleRepository
 import org.maurycy.framework.auth.table.RoleTable
 
@@ -16,7 +16,7 @@ class RolesResource(
     @GET
     @ReactiveTransactional
     fun getAllRoles(): Uni<List<RoleDto>> {
-        return roleRepository.findAll().list().map{ listRoleTable: List<RoleTable> ->
+        return roleRepository.findAll().list().map { listRoleTable: List<RoleTable> ->
             listRoleTable.map(RoleTable::roleDto)
         }
     }
