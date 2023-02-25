@@ -18,7 +18,7 @@ data class UserTable(
     var userName: String = "",
     @Column(unique = true)
     var email: String = "",
-    var password: String = "",
+    var hash: String = "",
 
     @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
     @JoinTable(
@@ -32,7 +32,6 @@ data class UserTable(
         return UserDto(
             userName = this.userName,
             email = this.email,
-            password = this.password,
             roles = this.roles.map(RoleTable::roleDto)
         )
     }
