@@ -1,5 +1,6 @@
 package org.maurycy.framework.auth
 
+import com.password4j.Password
 import io.quarkus.logging.Log
 import io.smallrye.jwt.build.Jwt
 import io.smallrye.mutiny.Uni
@@ -16,8 +17,7 @@ class AuthService(
     private val roleRepository: RoleRepository
 ) {
     private fun securePassword(password: String): String {
-        //TODO: hash passwords
-        return password
+        return Password.hash(password).addRandomSalt().addPepper().withArgon2().result
     }
 
     fun addRole(aName: String, aDescription: String): Uni<RoleTable> {
@@ -30,13 +30,13 @@ class AuthService(
         val password = securePassword(userRegister.password)
         val user = UserTable()
         user.userName = userRegister.userName
-        user.password = password
+        user.hash = password
         user.email = userRegister.email
         return roleRepository.findByName(userRegister.roles).chain { roleTableList ->
             Log.info("user register roles size ${userRegister.roles.size}")
             Log.info("size of roles: ${roleTableList.size}")
             user.roles = roleTableList
-            return@chain userRepository.persist(user).map { userTable->
+            return@chain userRepository.persist(user).map { userTable ->
                 val roles = userTable.roles.map(RoleTable::roleDto)
                 return@map UserDto(userTable, roles)
             }
@@ -47,16 +47,24 @@ class AuthService(
         val user = checkUser(userLogin)
         return Jwt.issuer("https://example.com/issuer")
             .upn(user.userName)
-            .groups(setOf())
+            .groups(user.roles.map(RoleTable::toString).toSet())
             .sign()
     }
 
     private suspend fun checkUser(userLogin: UserLogin): UserTable {
-        return userRepository.findByUserName(userLogin.userName).awaitSuspending()
+        val user = userRepository.findByUserName(userLogin.userName).awaitSuspending()
+        if (checkPassword(user.hash, userLogin.password)) {
+            return user
+        }
+        throw WrongPassword()
+    }
+
+    private fun checkPassword(hash: String, passwordSend: String): Boolean {
+        return Password.check(passwordSend, hash).withArgon2()
     }
 
     suspend fun getAllUsers(): List<UserDto> {
-        return userRepository.findAll().list().awaitSuspending().map (UserTable::userDto)
+        return userRepository.findAll().list().awaitSuspending().map(UserTable::userDto)
     }
 
 
