@@ -6,9 +6,7 @@ plugins {
     id("org.sonarqube") version "3.5.0.2730"
     id("org.owasp.dependencycheck") version "8.0.2"
 }
-application {
-    mainClass.set(System.getProperty("mainClass"))
-}
+
 repositories {
     mavenCentral()
     mavenLocal()

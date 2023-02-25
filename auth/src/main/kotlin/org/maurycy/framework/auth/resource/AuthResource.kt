@@ -1,4 +1,4 @@
-package org.maurycy.framework.auth
+package org.maurycy.framework.auth.resource
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional
@@ -13,6 +13,10 @@ import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.jboss.resteasy.reactive.RestResponse
 import org.jboss.resteasy.reactive.RestResponse.ResponseBuilder
+import org.maurycy.framework.auth.AuthService
+import org.maurycy.framework.auth.UserDto
+import org.maurycy.framework.auth.UserLogin
+import org.maurycy.framework.auth.UserRegister
 
 
 @Path("/api/auth")
@@ -21,14 +25,14 @@ class AuthResource(
 ) {
     @POST
     @ReactiveTransactional
-    fun register(userRegister: UserRegister): Uni<User> {
+    fun register(userRegister: UserRegister): Uni<UserDto> {
         return authService.register(userRegister)
     }
 
     @POST
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
-    suspend fun login(userLogin: UserLogin, @Context headers: HttpHeaders): RestResponse<JWTToken>? {
+    suspend fun login(userLogin: UserLogin, @Context headers: HttpHeaders): RestResponse<JWTToken> {
         val jwt = authService.login(userLogin)
         return ResponseBuilder.ok(JWTToken(jwt))
             .header(
@@ -39,7 +43,7 @@ class AuthResource(
     }
 
     @GET
-    suspend fun getAllUsers(): List<User> {
+    suspend fun getAllUsers(): List<UserDto> {
         return authService.getAllUsers()
     }
 
