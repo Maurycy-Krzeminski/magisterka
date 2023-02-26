@@ -24,12 +24,6 @@ class AuthService(
         return Password.hash(password).addRandomSalt().addPepper().withArgon2().result
     }
 
-    fun addRole(aName: String, aDescription: String): Uni<RoleTable> {
-        return roleRepository.persist(
-            RoleTable(name = aName, description = aDescription)
-        )
-    }
-
     fun register(userRegister: UserRegister): Uni<UserDto> {
         val password = securePassword(userRegister.password)
         val user = UserTable()
@@ -49,7 +43,8 @@ class AuthService(
 
     suspend fun login(userLogin: UserLogin): String {
         val user = checkUser(userLogin)
-        return Jwt.issuer("https://example.com/issuer")
+        return Jwt
+            .issuer("https://example.com/issuer")
             .upn(user.userName)
             .groups(user.roles.map(RoleTable::toString).toSet())
             .sign()
