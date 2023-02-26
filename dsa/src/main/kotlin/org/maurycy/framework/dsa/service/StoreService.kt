@@ -1,4 +1,4 @@
-package org.maurycy.framework.dsa
+package org.maurycy.framework.dsa.service
 
 
 import io.minio.BucketExistsArgs
@@ -24,6 +24,8 @@ import org.elasticsearch.client.Request
 import org.elasticsearch.client.Response
 import org.elasticsearch.client.RestClient
 import org.jboss.resteasy.reactive.multipart.FileUpload
+import org.maurycy.framework.dsa.model.StoredContent
+import org.maurycy.framework.dsa.model.FormData
 
 
 @ApplicationScoped
