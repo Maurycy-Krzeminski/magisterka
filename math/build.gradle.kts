@@ -22,20 +22,18 @@ dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-grpc")
-    implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
+    implementation("io.quarkus:quarkus-opentelemetry")
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
-    implementation("io.quarkus:quarkus-oidc")
-
-    implementation("io.quarkus:quarkus-kubernetes")
-    implementation("io.quarkus:quarkus-kind")
 
     implementation("io.quarkus:quarkus-infinispan-client")
     compileOnly("org.infinispan.protostream:protostream-processor:4.4.1.Final")
     kapt("org.infinispan.protostream:protostream-processor:4.4.1.Final")
+
+    implementation("io.quarkus:quarkus-logging-gelf")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("org.jfree:jfreechart:1.5.4")
