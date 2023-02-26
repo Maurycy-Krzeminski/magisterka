@@ -1,4 +1,4 @@
-package org.maurycy.framework.mba.entities
+package org.maurycy.framework.mba.model
 
 import org.infinispan.protostream.annotations.ProtoField
 

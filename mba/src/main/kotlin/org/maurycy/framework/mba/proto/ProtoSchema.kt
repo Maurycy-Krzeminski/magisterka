@@ -1,9 +1,9 @@
-package org.maurycy.framework.mba
+package org.maurycy.framework.mba.proto
 
 import javax.enterprise.context.ApplicationScoped
 import org.infinispan.protostream.GeneratedSchema
 import org.infinispan.protostream.annotations.AutoProtoSchemaBuilder
-import org.maurycy.framework.mba.entities.DataDtoProto
+import org.maurycy.framework.mba.model.DataDtoProto
 
 @ApplicationScoped
 @AutoProtoSchemaBuilder(

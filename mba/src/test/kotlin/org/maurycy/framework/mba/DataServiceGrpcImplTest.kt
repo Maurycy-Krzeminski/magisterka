@@ -3,14 +3,14 @@ package org.maurycy.framework.mba
 import io.quarkus.mongodb.panache.kotlin.reactive.ReactivePanacheQuery
 import io.quarkus.test.junit.QuarkusTest
 import io.smallrye.mutiny.Uni
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.maurycy.framework.mba.entities.DataDto
+import org.maurycy.framework.mba.model.DataDto
 import org.maurycy.framework.mba.generated.AddDataRequest
 import org.maurycy.framework.mba.generated.GetAllDataRequest
 import org.maurycy.framework.mba.generated.GetDataRequest
+import org.maurycy.framework.mba.grpc.DataServiceGrpcImpl
 import org.maurycy.framework.mba.repository.DataRepository
 import org.mockito.Mockito
 
@@ -59,16 +59,18 @@ class DataServiceGrpcImplTest {
         @JvmStatic
         @BeforeAll
         fun beforeAll() {
-            val query = Mockito.mock(ReactivePanacheQuery::class.java)
+            val query: ReactivePanacheQuery<DataDto> = Mockito.mock(ReactivePanacheQueryDataDto::class.java)
             Mockito.`when`(dataRepository.findAll()).thenReturn(
-                query as ReactivePanacheQuery<DataDto>?
+                query
             )
             Mockito.`when`(query.list()).thenReturn(
                 Uni.createFrom().item(
-                    listOf(DataDto(ObjectId(hexString), map1))
+                    listOf(DataDto(hexString, map1))
                 )
             )
 
         }
     }
+
+    private interface ReactivePanacheQueryDataDto : ReactivePanacheQuery<DataDto>
 }

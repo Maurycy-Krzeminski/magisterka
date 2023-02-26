@@ -1,12 +1,15 @@
-package org.maurycy.framework.mba
+package org.maurycy.framework.mba.exception.mapper
 
 import javax.ws.rs.core.Response
 import org.jboss.resteasy.reactive.RestResponse
 
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper
+import org.maurycy.framework.mba.exception.FailedToBuildObjectIdException
+import org.maurycy.framework.mba.exception.FailedToFindByIdException
+import org.maurycy.framework.mba.model.ExceptionDto
 
 
-internal class ExceptionMappers {
+class ExceptionMappers {
 
     @ServerExceptionMapper
     fun mapExceptionFailedToBuildObjectIdException(x: FailedToBuildObjectIdException): RestResponse<ExceptionDto> {

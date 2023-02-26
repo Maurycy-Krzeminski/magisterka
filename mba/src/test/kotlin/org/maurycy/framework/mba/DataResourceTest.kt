@@ -8,8 +8,9 @@ import javax.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.maurycy.framework.mba.entities.DataDto
-import org.maurycy.framework.mba.entities.DataInput
+import org.maurycy.framework.mba.model.DataDto
+import org.maurycy.framework.mba.model.DataInput
+import org.maurycy.framework.mba.resource.DataResource
 
 @QuarkusTest
 @TestHTTPEndpoint(DataResource::class)
@@ -19,7 +20,8 @@ class DataResourceTest {
     private val map1String = "\"data\":{\"1\":\"a\",\"2\":\"b\",\"3\":\"c\"}"
     private val map2 = mapOf(Pair("4", "d"), Pair("5", "e"), Pair("6", "f"))
     private val map2String = "\"data\":{\"4\":\"d\",\"5\":\"e\",\"6\":\"f\"}"
-    private val failedToBuildObjectId  = "{\"error\":\"Failed to build object id exception\"}"
+    private val failedToBuildObjectId = "{\"error\":\"Failed to build object id exception\"}"
+
     @Test
     @TestTransaction
     fun getAllTest() {
@@ -57,7 +59,7 @@ class DataResourceTest {
     fun addDataTest() {
         val body = RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(map1))
+            .body(DataInput(hexString, map1))
             .`when`().post()
             .then()
             .statusCode(201)
@@ -82,7 +84,7 @@ class DataResourceTest {
     fun deleteDataTest() {
         val body = RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(mapOf(Pair("1", "a"), Pair("2", "b"), Pair("3", "c"))))
+            .body(DataInput(hexString, map1))
             .`when`().post()
             .then()
             .statusCode(201)
@@ -106,7 +108,7 @@ class DataResourceTest {
     fun putDataTest() {
         val body = RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(map1))
+            .body(DataInput(hexString, map1))
             .`when`().post()
             .then()
             .statusCode(201)
@@ -117,7 +119,7 @@ class DataResourceTest {
 
         RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(map2))
+            .body(DataInput(hexString, map2))
             .`when`()
             .put("/${body.id}")
             .then()
@@ -133,7 +135,7 @@ class DataResourceTest {
     fun putDataFailedToBuildObjectIdTest() {
         RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(map2))
+            .body(DataInput(hexString, map2))
             .`when`()
             .put("/aaa")
             .then()
@@ -146,7 +148,7 @@ class DataResourceTest {
     fun putDataFailedToFindObjectIdTest() {
         RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(DataInput(map2))
+            .body(DataInput(hexString, map2))
             .`when`()
             .put("/$hexString")
             .then()

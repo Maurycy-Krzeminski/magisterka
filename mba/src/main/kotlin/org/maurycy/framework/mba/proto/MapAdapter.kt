@@ -1,4 +1,4 @@
-package org.maurycy.framework.mba
+package org.maurycy.framework.mba.proto
 
 import org.infinispan.protostream.annotations.ProtoAdapter
 import org.infinispan.protostream.annotations.ProtoFactory
