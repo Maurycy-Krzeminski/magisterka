@@ -5,19 +5,19 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-panache-common/2.16.2.Final/e25e7b2965e1c7cf85b8a1f0e4e656e670dc65ef/quarkus-panache-common-2.16.2.Final.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-arc/2.16.2.Final/e743499c22f07eda63501cb6ccc3dc8e05acc399/quarkus-arc-2.16.2.Final.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-core/2.16.2.Final/dd436cda6eda3637fb9d347ade44af8ad9166f6d/quarkus-core-2.16.2.Final.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus.arc/arc/2.16.2.Final/b113d50f86b19ee692536050d155c143e2ea2cad/arc-2.16.2.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-panache-common/2.16.3.Final/25d92fe77f7a0c9279f4dd25de4a1aec80f2b571/quarkus-panache-common-2.16.3.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-arc/2.16.3.Final/6f67f4ec06c905b625e0df6fc94aa804c67a4889/quarkus-arc-2.16.3.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-core/2.16.3.Final/1b9e8fc8f24b30d5915827d79927448b60a51338/quarkus-core-2.16.3.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus.arc/arc/2.16.3.Final/ca63341bdb1b646dc8685ed750dcc24c929fa8eb/arc-2.16.3.Final.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.enterprise/jakarta.enterprise.cdi-api/2.0.2/58f497f362cd19c2f8842d75c491d270f0600e7f/jakarta.enterprise.cdi-api-2.0.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.interceptor/jakarta.interceptor-api/1.2.5/20cbde692c555692ca835fb6ecb4a8c95acbe6e0/jakarta.interceptor-api-1.2.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.annotation/jakarta.annotation-api/1.3.5/59eb84ee0d616332ff44aba065f3888cf002cd2d/jakarta.annotation-api-1.3.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/1.0/93164437046e06b4876e069b8e7a321a02f10a2d/jakarta.inject-api-1.0.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-ide-launcher/2.16.2.Final/51cd57a52464a28af16319c302522717e840dfe/quarkus-ide-launcher-2.16.2.Final.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-development-mode-spi/2.16.2.Final/e1b6fef952a08a55a138ce482147434df4674422/quarkus-development-mode-spi-2.16.2.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-ide-launcher/2.16.3.Final/b0cd45f54f1f36763ab757692fbf0c4d9718a988/quarkus-ide-launcher-2.16.3.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-development-mode-spi/2.16.3.Final/6a272d37634ca393bb97956869e493c11a772c7/quarkus-development-mode-spi-2.16.3.Final.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.smallrye.config/smallrye-config/2.13.2/13429cab6f12a8d7bd34e8ecbb9b08dedcc97f76/smallrye-config-2.13.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jboss.threads/jboss-threads/3.4.3.Final/2433a04e5a0f8982454a2bbe2700ee272a3a71c2/jboss-threads-3.4.3.Final.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-bootstrap-runner/2.16.2.Final/22ffadff70371eeaf95489924de165bb417b6af0/quarkus-bootstrap-runner-2.16.2.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.quarkus/quarkus-bootstrap-runner/2.16.3.Final/4f4ce03635595716afec755edf457b69aefc1557/quarkus-bootstrap-runner-2.16.3.Final.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.smallrye.config/smallrye-config-core/2.13.2/ca3affee3858b5d86c2db9d7b4ba68183766741b/smallrye-config-core-2.13.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.smallrye.common/smallrye-common-expression/1.13.2/3b4b12bdad13241d8c1a439aaeecdc271601ed34/smallrye-common-expression-1.13.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.smallrye.common/smallrye-common-function/1.13.2/781d80272140a6382c2d54f02b3fc61337179558/smallrye-common-function-1.13.2.jar" />
@@ -44,11 +44,45 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.4/b4e0e2d2e023aa317b7cfcfc916377ea348e07d1/asm-9.4.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar" />
         </processorPath>
-        <module name="mba.main" />
+        <module name="auth.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mbaJava" target="17" />
+      <module name="auth.keycloak" target="17" />
+      <module name="auth.keycloak.integrationTest" target="17" />
+      <module name="auth.keycloak.main" target="17" />
+      <module name="auth.keycloak.native-test" target="17" />
+      <module name="auth.keycloak.quarkus-generated-sources" target="17" />
+      <module name="auth.keycloak.quarkus-test-generated-sources" target="17" />
+      <module name="auth.keycloak.test" target="17" />
+      <module name="bpm" target="17" />
+      <module name="bpm.integrationTest" target="17" />
+      <module name="bpm.main" target="17" />
+      <module name="bpm.native-test" target="17" />
+      <module name="bpm.quarkus-generated-sources" target="17" />
+      <module name="bpm.quarkus-test-generated-sources" target="17" />
+      <module name="bpm.test" target="17" />
+      <module name="gdba" target="17" />
+      <module name="gdba.integrationTest" target="17" />
+      <module name="gdba.main" target="17" />
+      <module name="gdba.native-test" target="17" />
+      <module name="gdba.quarkus-generated-sources" target="17" />
+      <module name="gdba.quarkus-test-generated-sources" target="17" />
+      <module name="gdba.test" target="17" />
+      <module name="keycloak.auth" target="17" />
+      <module name="keycloak.auth.integrationTest" target="17" />
+      <module name="keycloak.auth.main" target="17" />
+      <module name="keycloak.auth.native-test" target="17" />
+      <module name="keycloak.auth.quarkus-generated-sources" target="17" />
+      <module name="keycloak.auth.quarkus-test-generated-sources" target="17" />
+      <module name="keycloak.auth.test" target="17" />
+      <module name="keycloak.config" target="17" />
+      <module name="keycloak.config.integrationTest" target="17" />
+      <module name="keycloak.config.main" target="17" />
+      <module name="keycloak.config.native-test" target="17" />
+      <module name="keycloak.config.quarkus-generated-sources" target="17" />
+      <module name="keycloak.config.quarkus-test-generated-sources" target="17" />
+      <module name="keycloak.config.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
