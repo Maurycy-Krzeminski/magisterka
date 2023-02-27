@@ -1,6 +1,7 @@
 package org.maurycy.framework.auth.resource
 
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional
+import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.Uni
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -15,10 +16,8 @@ class RolesResource(
 ) {
     @GET
     @ReactiveTransactional
-    fun getAllRoles(): Uni<List<RoleDto>> {
-        return roleRepository.findAll().list().map { listRoleTable: List<RoleTable> ->
-            listRoleTable.map(RoleTable::roleDto)
-        }
+    fun getAllRoles(): Multi<RoleDto>? {
+        return roleRepository.findAll().stream().map(RoleTable::roleDto)
     }
 
     @POST
