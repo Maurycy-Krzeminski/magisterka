@@ -24,8 +24,10 @@ import org.elasticsearch.client.Request
 import org.elasticsearch.client.Response
 import org.elasticsearch.client.RestClient
 import org.jboss.resteasy.reactive.multipart.FileUpload
-import org.maurycy.framework.dsa.model.StoredContent
+import org.maurycy.framework.dsa.exception.NoFileSentException
+import org.maurycy.framework.dsa.exception.TooManyFilesSentException
 import org.maurycy.framework.dsa.model.FormData
+import org.maurycy.framework.dsa.model.StoredContent
 
 
 @ApplicationScoped
@@ -37,10 +39,14 @@ class StoreService(
 
     fun storeFiles(aFormData: FormData): String {
         createBucket()
-        aFormData.files?.forEach {
-            storeFile(it)
+        val files = aFormData.files
+        if (files == null) {
+            throw NoFileSentException()
         }
-        return "test"
+        if (files.size > 1) {
+            throw TooManyFilesSentException()
+        }
+        return storeFile(files[0])
     }
 
     fun findFile(aFileName: String): GetObjectResponse {
@@ -60,7 +66,7 @@ class StoreService(
     }
 
 
-    private fun storeFile(aFileUpload: FileUpload) {
+    private fun storeFile(aFileUpload: FileUpload): String {
         val inputStream = FileInputStream(aFileUpload.filePath().toString())
         val baos = ByteArrayOutputStream()
         inputStream.transferTo(baos)
@@ -91,7 +97,7 @@ class StoreService(
         restClient.performRequest(request)
         cloneForMinio.close()
         cloneForIndexing.close()
-
+        return aFileUpload.fileName()
     }
 
     private val listOfIndex = listOf("content", "bucket", "etag", "name")

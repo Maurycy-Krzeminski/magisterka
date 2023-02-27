@@ -3,8 +3,11 @@ package org.maurycy.framework.dsa.resource
 import io.quarkus.logging.Log
 import io.smallrye.common.annotation.Blocking
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
+import org.jboss.resteasy.reactive.RestResponse
 import org.maurycy.framework.dsa.model.FormData
 import org.maurycy.framework.dsa.service.StoreService
 
@@ -14,14 +17,15 @@ class StoreResource(
 ) {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_PLAIN)
-    fun test(aFormData: FormData): String {
-        return storeService.storeFiles(aFormData = aFormData)
+    @Produces(MediaType.APPLICATION_JSON)
+    suspend fun test(aFormData: FormData, @Context uriInfo: UriInfo): RestResponse<String> {
+        val answer = storeService.storeFiles(aFormData = aFormData)
+        return RestResponse.ResponseBuilder
+            .created<String>(uriInfo.absolutePathBuilder.path(answer).build()).build()
     }
 
     @GET
     @Path("{name}")
-    @Consumes
     @Produces(MediaType.TEXT_PLAIN)
     @Blocking
     fun get(@PathParam("name") aName: String): Response {
