@@ -18,7 +18,7 @@ class StoreResource(
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    suspend fun test(aFormData: FormData, @Context uriInfo: UriInfo): RestResponse<String> {
+    suspend fun uploadFile(aFormData: FormData, @Context uriInfo: UriInfo): RestResponse<String> {
         val answer = storeService.storeFiles(aFormData = aFormData)
         return RestResponse.ResponseBuilder
             .created<String>(uriInfo.absolutePathBuilder.path(answer).build()).build()
@@ -28,7 +28,7 @@ class StoreResource(
     @Path("{name}")
     @Produces(MediaType.TEXT_PLAIN)
     @Blocking
-    fun get(@PathParam("name") aName: String): Response {
+    fun downloadFile(@PathParam("name") aName: String): Response {
         Log.info("searching file")
         val e = storeService.findFile(aFileName = aName)
         Log.info(e)
@@ -46,6 +46,6 @@ class StoreResource(
 
     @GET
     @Path("search/{input}")
-    fun getName(@PathParam("input") aParamToSearchBy: String) = storeService.searchFull(aParamToSearchBy)
+    fun searchForFile(@PathParam("input") aParamToSearchBy: String) = storeService.searchFull(aParamToSearchBy)
 
 }
