@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
     id("org.sonarqube") version "3.5.0.2730"
     id("org.owasp.dependencycheck") version "8.0.2"
+    jacoco
 }
 
 repositories {
@@ -32,6 +33,7 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-reactive")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("io.quarkus:quarkus-jacoco")
 }
 
 group = "org.maurycy.framework"
@@ -44,6 +46,7 @@ java {
 
 tasks.withType<Test> {
     systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+    finalizedBy("jacocoTestReport")
 }
 allOpen {
     annotation("javax.ws.rs.Path")
@@ -54,4 +57,28 @@ allOpen {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
     kotlinOptions.javaParameters = true
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+    }
+    dependsOn("test")
+}
+
+sonarqube{
+    properties {
+        property("sonar.host.url", "http://localhost:9000")
+    }
+}
+tasks.test{
+    configure<JacocoTaskExtension> {
+        isEnabled = true
+        includes = emptyList()
+        excludes = emptyList()
+        excludeClassLoaders = listOf("*QuarkusClassLoader")
+    }
+}
+tasks.named("sonar").configure {
+    dependsOn("jacocoTestReport")
 }
