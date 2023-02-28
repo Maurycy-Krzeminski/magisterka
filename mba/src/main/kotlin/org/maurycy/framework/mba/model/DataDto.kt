@@ -8,6 +8,6 @@ import org.bson.codecs.pojo.annotations.BsonId
 @MongoEntity(collection = "StoredData")
 data class DataDto(
     @BsonId
-    var id: String,
-    var data: Map<String, String>,
-): PanacheMongoEntityBase()
+    var id: String? = null,
+    var data: Map<String, String>? = null,
+) : PanacheMongoEntityBase()

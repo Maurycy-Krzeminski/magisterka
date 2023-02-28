@@ -38,6 +38,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.quarkus:quarkus-jacoco")
     testImplementation("io.quarkus:quarkus-junit5-mockito")
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
 }
 
 group = "org.maurycy.framework"

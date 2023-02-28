@@ -48,6 +48,7 @@ class DataResource(
     @Path("{id}")
     @ResponseStatus(204)
     fun deleteData(@PathParam("id") aId: String): Uni<Void> {
+        cache.remove(aId)
         return dataRepository.deleteById(aId).replaceWithVoid()
     }
 
