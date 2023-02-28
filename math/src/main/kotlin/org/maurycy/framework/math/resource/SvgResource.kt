@@ -1,6 +1,5 @@
 package org.maurycy.framework.math.resource
 
-import io.quarkus.logging.Log
 import java.awt.Rectangle
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -30,16 +29,6 @@ class SvgResource(
         val r = Rectangle(0, 0, 800, 600)
         chart.draw(g2, r)
         return g2.svgElement
-    }
-
-
-
-    @GET
-    @Path("t")
-    @Produces(MediaType.TEXT_PLAIN)
-    fun t(): String {
-        Log.info("TESTing ")
-        return "testsssssss"
     }
 
     private fun createDataset(): CategoryDataset {
