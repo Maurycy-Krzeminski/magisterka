@@ -8,11 +8,13 @@ import javax.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @QuarkusTest
 @TestHTTPEndpoint(StoreResource::class)
 class StoreResourceTest {
-    private val fileName = "test.txt"
+
 
     @Test
     fun uploadFileFailedWhenEmpty() {
@@ -23,8 +25,10 @@ class StoreResourceTest {
             .body(CoreMatchers.`is`(""))
     }
 
-    @Test
-    fun uploadFile() {
+
+    @ParameterizedTest
+    @ValueSource(strings = ["test.txt", "test.doc", "test.docx", "test.pdf"])
+    fun uploadFile(fileName: String) {
         val file = File(
             javaClass.classLoader.getResource(fileName)?.file ?: fail("File $fileName not found in resource directory")
         )
@@ -38,8 +42,9 @@ class StoreResourceTest {
             .body(CoreMatchers.`is`(""))
     }
 
-    @Test
-    fun downloadFile() {
+    @ParameterizedTest
+    @ValueSource(strings = ["test.txt", "test.doc", "test.docx", "test.pdf"])
+    fun downloadFile(fileName: String) {
         val file = File(
             javaClass.classLoader.getResource(fileName)?.file ?: fail("File $fileName not found in resource directory")
         )
@@ -48,13 +53,11 @@ class StoreResourceTest {
             .accept(MediaType.APPLICATION_JSON)
             .`when`().post()
 
-
         RestAssured.given()
             .accept("*/*")
             .get(fileName)
             .then()
             .statusCode(200)
-            .body(CoreMatchers.`is`(""))
             .header("Content-Disposition", "attachment;filename=$fileName")
 
     }
@@ -73,5 +76,6 @@ class StoreResourceTest {
 
     @Test
     fun searchForFile() {
+        //TODO: TEST searching capabilities and indexes based on current knowledge indexes created for non .txt files are created in a wrong manner
     }
 }
