@@ -9,15 +9,16 @@ import io.minio.MakeBucketArgs
 import io.minio.MinioClient
 import io.minio.PutObjectArgs
 import io.quarkus.logging.Log
+import io.quarkus.tika.TikaContent
+import io.quarkus.tika.TikaMetadata
+import io.quarkus.tika.TikaParser
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
-import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 import javax.enterprise.context.ApplicationScoped
 import org.apache.http.util.EntityUtils
 import org.elasticsearch.client.Request
@@ -33,7 +34,8 @@ import org.maurycy.framework.dsa.model.StoredContent
 @ApplicationScoped
 class StoreService(
     private val minio: MinioClient,
-    private val restClient: RestClient
+    private val elasticSearchClient: RestClient,
+    private val tikaParser: TikaParser
 ) {
     private val bucketName = "test"
 
@@ -88,19 +90,31 @@ class StoreService(
             "/minio/_doc/$id"
         )
         val storedContent = StoredContent()
+        val parsed = parseInputStream(cloneForIndexing)
         storedContent.id = id
-        storedContent.content = streamToString(cloneForIndexing)
+        storedContent.content = parsed.text
+        storedContent.metaData = metaDataParse(parsed.metadata)
         storedContent.name = response.`object`()
         storedContent.bucket = response.bucket()
         storedContent.etag = response.etag()
         request.setJsonEntity(JsonObject.mapFrom(storedContent).toString())
-        restClient.performRequest(request)
+        elasticSearchClient.performRequest(request)
         cloneForMinio.close()
         cloneForIndexing.close()
         return aFileUpload.fileName()
     }
 
-    private val listOfIndex = listOf("content", "bucket", "etag", "name")
+    private fun metaDataParse(tikaMetadata: TikaMetadata): Map<String, List<String>> {
+        val map = mutableMapOf<String, List<String>>()
+        tikaMetadata.names.forEach {
+            val res = tikaMetadata.getValues(it)
+            map[it] = res
+            Log.info("$it :$res")
+        }
+        return map
+    }
+
+    private val listOfIndex = listOf("content", "bucket", "etag", "name", "metaData")
     fun searchFull(aInput: String): List<StoredContent> {
         val set = mutableSetOf<StoredContent>()
         set.addAll(search(listOfIndex, aInput))
@@ -129,7 +143,7 @@ class StoreService(
         val queryJson = JsonObject().put("query", matchJson)
         Log.info("query json: ${queryJson.encodePrettily()}")
         request.setJsonEntity(queryJson.encode())
-        val response: Response = restClient.performRequest(request)
+        val response: Response = elasticSearchClient.performRequest(request)
         val responseBody: String = EntityUtils.toString(response.entity)
         val json = JsonObject(responseBody)
         val hits: JsonArray = json.getJsonObject("hits").getJsonArray("hits")
@@ -151,15 +165,8 @@ class StoreService(
         return list
     }
 
-    private fun streamToString(aInputStream: InputStream): String {
-        val textBuilder = StringBuilder()
-        BufferedReader(InputStreamReader(aInputStream)).use { reader ->
-            var c: Int
-            while (reader.read().also { c = it } != -1) {
-                textBuilder.append(c.toChar())
-            }
-        }
-        return textBuilder.toString()
+    private fun parseInputStream(aInputStream: InputStream): TikaContent {
+        return tikaParser.parse(aInputStream)
     }
 
 }

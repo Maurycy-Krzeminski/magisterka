@@ -1,6 +1,5 @@
 package org.maurycy.framework.dsa.resource
 
-import io.quarkus.logging.Log
 import io.smallrye.common.annotation.Blocking
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
@@ -29,9 +28,7 @@ class StoreResource(
     @Produces(MediaType.TEXT_PLAIN)
     @Blocking
     fun downloadFile(@PathParam("name") aName: String): Response {
-        Log.info("searching file")
         val e = storeService.findFile(aFileName = aName)
-        Log.info(e)
         return Response.ok(
             e.readAllBytes()
         )
