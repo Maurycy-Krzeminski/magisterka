@@ -1,2 +1,4 @@
 /team-city/volumes/teamcityAgent/
 /team-city/volumes/teamcityServer/
+/.gradle/
+/.idea/sonarlint/
