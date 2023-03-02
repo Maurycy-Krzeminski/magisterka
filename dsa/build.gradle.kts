@@ -20,7 +20,7 @@ val quarkusPlatformVersion: String by project
 dependencies {
     implementation("io.quarkus:quarkus-container-image-jib")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
-    implementation("io.quarkus:quarkus-tika")
+    implementation("io.quarkiverse.tika:quarkus-tika:1.1.0")
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-grpc")
     implementation("io.quarkus:quarkus-opentelemetry")
