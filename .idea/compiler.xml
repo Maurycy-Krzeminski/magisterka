@@ -37,6 +37,13 @@
       <module name="keycloak.config.quarkus-generated-sources" target="17" />
       <module name="keycloak.config.quarkus-test-generated-sources" target="17" />
       <module name="keycloak.config.test" target="17" />
+      <module name="org.maurycy.framework.mba" target="17" />
+      <module name="org.maurycy.framework.mba.integrationTest" target="17" />
+      <module name="org.maurycy.framework.mba.main" target="17" />
+      <module name="org.maurycy.framework.mba.native-test" target="17" />
+      <module name="org.maurycy.framework.mba.quarkus-generated-sources" target="17" />
+      <module name="org.maurycy.framework.mba.quarkus-test-generated-sources" target="17" />
+      <module name="org.maurycy.framework.mba.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

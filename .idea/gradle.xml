@@ -4,6 +4,39 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/dsa" name="dsa">
+                <projects>
+                  <project path="$PROJECT_DIR$/dsa" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/math" name="math">
+                <projects>
+                  <project path="$PROJECT_DIR$/math" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/mba" name="mba">
+                <projects>
+                  <project path="$PROJECT_DIR$/mba" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/dsa" />
+            <option value="$PROJECT_DIR$/math" />
+            <option value="$PROJECT_DIR$/mba" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/auth" />
         <option name="gradleJvm" value="graalvm-ce-17" />
