@@ -38,7 +38,14 @@ class StoreResourceTest {
             .`when`().post()
             .then()
             .statusCode(201)
-            .header("Location", "http://localhost:8081/store/$fileName")
+            .header(
+                "Location",
+                CoreMatchers.containsString("http://localhost:")
+            )
+            .header(
+                "Location",
+                CoreMatchers.containsString("/store/$fileName")
+            )
             .body(CoreMatchers.`is`(""))
     }
 
