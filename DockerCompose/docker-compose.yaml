@@ -87,26 +87,30 @@ services:
 
 
 
-#  mba:
-#    image: maurycy/mba:1.0.0-SNAPSHOT
-#    depends_on:
-#      - traefik
-#      - mba_mongo
-#    labels:
-#      - "traefik.http.routers.mba.rule=Host(`mba.localhost`)"
-#    environment:
-#      QUARKUS_MONGODB_HOSTS: mba_mongo
-#      QUARKUS_MONGODB_DATABASE: default
-#
-#  mba_mongo:
-#    image: mongo:5.0
-#
-#  math:
-#    image: maurycy/math:1.0.0-SNAPSHOT
-#    depends_on:
-#      - traefik
-#    labels:
-#      - "traefik.http.routers.math.rule=Host(`math.localhost`)"
+  mba:
+    build:
+      context: ../mba/
+      dockerfile: ../mba/src/main/docker/Dockerfile.jvm
+    depends_on:
+      - traefik
+      - mba_mongo
+    labels:
+      - "traefik.http.routers.mba.rule=Host(`mba.localhost`)"
+    environment:
+      QUARKUS_MONGODB_HOSTS: mba_mongo
+      QUARKUS_MONGODB_DATABASE: default
+
+  mba_mongo:
+    image: mongo:5.0
+
+  math:
+    build:
+      context: ../math/
+      dockerfile: ../math/src/main/docker/Dockerfile.jvm
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.http.routers.math.rule=Host(`math.localhost`)"
 
 volumes:
   data1-1:
