@@ -1,8 +1,8 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.22"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.22"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.22"
-    id("org.jetbrains.kotlin.kapt") version "1.7.22"
+    kotlin("jvm") version "1.7.22"
+    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.22"
+    kotlin("kapt") version "1.7.22"
     id("org.jetbrains.dokka") version "1.7.20"
     id("org.sonarqube") version "3.5.0.2730"
     id("org.owasp.dependencycheck") version "8.0.2"
@@ -14,6 +14,10 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
+
+val quarkusPlatformGroupId: String by project
+val quarkusPlatformArtifactId: String by project
+val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -43,34 +47,35 @@ dependencies {
 
 }
 
-group("org.maurycy.framework")
-version("1.0.0-SNAPSHOT")
+group = "org.maurycy.framework"
+version = "1.0.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-    finalizedBy jacocoTestReport
-    jacoco {
-        excludeClassLoaders = ["*QuarkusClassLoader"]
-        destinationFile = layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile
+tasks.withType<Test> {
+    systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+    finalizedBy(tasks.jacocoTestReport)
+    configure<JacocoTaskExtension> {
+        isEnabled = true
+        setDestinationFile(layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile)
+        excludeClassLoaders = listOf("*QuarkusClassLoader")
     }
-    jacocoTestReport.enabled = false
 }
+tasks.jacocoTestReport {
+    enabled = false
+    dependsOn(tasks.test) // tests are required to run before generating the report
+}
+
 allOpen {
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
     kotlinOptions.javaParameters = true
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
 }
