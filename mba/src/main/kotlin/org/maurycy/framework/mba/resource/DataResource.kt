@@ -12,24 +12,17 @@ import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
-import org.infinispan.client.hotrod.DefaultTemplate
-import org.infinispan.client.hotrod.RemoteCache
-import org.infinispan.client.hotrod.RemoteCacheManager
 import org.jboss.resteasy.reactive.ResponseStatus
 import org.maurycy.framework.mba.exception.FailedToFindByIdException
 import org.maurycy.framework.mba.model.DataDto
-import org.maurycy.framework.mba.model.DataDtoProto
 import org.maurycy.framework.mba.model.DataInput
 import org.maurycy.framework.mba.repository.DataRepository
 
 @Path("/data")
 class DataResource(
     private val dataRepository: DataRepository,
-    cacheManager: RemoteCacheManager
 ) {
 
-    var cache: RemoteCache<String, DataDtoProto> =
-        cacheManager.administration().getOrCreateCache("test", DefaultTemplate.DIST_SYNC)
 
 
     @GET
@@ -52,7 +45,6 @@ class DataResource(
     @ResponseStatus(204)
     @RolesAllowed("user", "admin")
     fun deleteData(@PathParam("id") aId: String): Uni<Void> {
-        cache.remove(aId)
         return dataRepository.deleteById(aId).replaceWithVoid()
     }
 
@@ -77,20 +69,15 @@ class DataResource(
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("user", "admin")
-    suspend fun getById(@PathParam("id") aId: String): DataDtoProto {
-        return Uni.createFrom().item(cache.getOrPut(aId) {
+    suspend fun getById(@PathParam("id") aId: String): DataDto {
             return dataRepository.findById(aId).map {
                 if (it == null) {
                     throw FailedToFindByIdException(aId)
                 }
-                cache[aId] = convertDataDtoToProto(it)
-                return@map convertDataDtoToProto(it)
+                return@map it
             }.awaitSuspending()
-        }).awaitSuspending()
+
     }
 
-    private fun convertDataDtoToProto(it: DataDto): DataDtoProto {
-        return DataDtoProto(id = it.id, data = it.data)
-    }
 
 }
