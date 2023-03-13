@@ -2,6 +2,7 @@ package org.maurycy.framework.mba.resource
 
 import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.coroutines.awaitSuspending
+import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
@@ -32,6 +33,7 @@ class DataResource(
 
 
     @GET
+    @RolesAllowed("user", "admin")
     fun getAll(): Uni<List<DataDto>> {
         return dataRepository.findAll().list()
     }
@@ -40,6 +42,7 @@ class DataResource(
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON) //TODO: make it idempotent
     @ResponseStatus(201)
+    @RolesAllowed("user", "admin")
     fun addData(aData: DataDto): Uni<DataDto> {
         return dataRepository.persist(aData)
     }
@@ -47,6 +50,7 @@ class DataResource(
     @DELETE
     @Path("{id}")
     @ResponseStatus(204)
+    @RolesAllowed("user", "admin")
     fun deleteData(@PathParam("id") aId: String): Uni<Void> {
         cache.remove(aId)
         return dataRepository.deleteById(aId).replaceWithVoid()
@@ -56,6 +60,7 @@ class DataResource(
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user", "admin")
     fun putData(@PathParam("id") aId: String, aData: DataInput): Uni<DataDto> {
         return dataRepository.findById(aId).chain { it ->
             if (it == null) {
@@ -71,6 +76,7 @@ class DataResource(
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user", "admin")
     suspend fun getById(@PathParam("id") aId: String): DataDtoProto {
         return Uni.createFrom().item(cache.getOrPut(aId) {
             return dataRepository.findById(aId).map {

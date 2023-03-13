@@ -4,6 +4,7 @@ import com.github.javafaker.Faker
 import io.quarkus.test.TestTransaction
 import io.quarkus.test.common.http.TestHTTPEndpoint
 import io.quarkus.test.junit.QuarkusTest
+import io.quarkus.test.security.TestSecurity
 import io.restassured.RestAssured
 import javax.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers
@@ -25,6 +26,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun getAllTest() {
         RestAssured.given()
             .`when`().get()
@@ -35,6 +37,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun getByIdFailedToBuildObjectIdTest() {
         RestAssured.given()
             .`when`()
@@ -45,6 +48,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun getByIdFailedToFindObjectIdTest() {
         val id = faker.animal().name()
         RestAssured.given()
@@ -57,6 +61,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun addDataTest() {
         val id = faker.animal().name()
         val body = RestAssured.given()
@@ -83,6 +88,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun deleteDataTest() {
         val id = faker.animal().name()
         val body = RestAssured.given()
@@ -108,6 +114,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun putDataTest() {
         val id = faker.animal().name()
         val body = RestAssured.given()
@@ -136,6 +143,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun putDataFailedToBuildObjectIdTest() {
         val id = faker.animal().name()
         RestAssured.given()
@@ -149,6 +157,7 @@ class DataResourceTest {
 
     @Test
     @TestTransaction
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun putDataFailedToFindObjectIdTest() {
         val id = faker.animal().name()
         RestAssured.given()

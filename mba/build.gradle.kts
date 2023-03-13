@@ -21,6 +21,7 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("io.quarkus:quarkus-oidc")
     implementation("io.quarkus:quarkus-mutiny")
     implementation("io.quarkus:quarkus-infinispan-client")
     compileOnly("org.infinispan.protostream:protostream-processor:4.4.1.Final")
@@ -44,7 +45,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("com.github.javafaker:javafaker:1.0.2")
-
+    testImplementation("io.quarkus:quarkus-test-security")
 }
 
 group = "org.maurycy.framework"
