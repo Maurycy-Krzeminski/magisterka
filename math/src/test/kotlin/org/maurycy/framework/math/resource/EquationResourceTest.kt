@@ -2,6 +2,7 @@ package org.maurycy.framework.math.resource
 
 import io.quarkus.test.common.http.TestHTTPEndpoint
 import io.quarkus.test.junit.QuarkusTest
+import io.quarkus.test.security.TestSecurity
 import io.restassured.RestAssured
 import javax.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers
@@ -21,6 +22,7 @@ class EquationResourceTest {
     val singularCoefficient2 = doubleArrayOf(2.0, 4.0)
 
     @Test
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun solveFailWhenEmptyInput() {
         RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
@@ -36,6 +38,7 @@ class EquationResourceTest {
 
     @ParameterizedTest
     @EnumSource(Decomposition::class)
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun solveNonSquareMatrix(decomposition: Decomposition) {
         val validatableResponse = RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)
@@ -72,6 +75,7 @@ class EquationResourceTest {
 
     @ParameterizedTest
     @EnumSource(Decomposition::class)
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun solveSingularMatrix(decomposition: Decomposition) {
         val situation1 = arrayOf(Decomposition.LUDecomposition, Decomposition.EigenDecomposition)
         val situation2 = arrayOf(Decomposition.CholeskyDecomposition)
@@ -116,6 +120,7 @@ class EquationResourceTest {
 
     @ParameterizedTest
     @EnumSource(Decomposition::class)
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun solve(decomposition: Decomposition) {
         RestAssured.given()
             .contentType(MediaType.APPLICATION_JSON)

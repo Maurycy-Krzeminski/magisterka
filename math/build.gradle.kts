@@ -21,6 +21,7 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("io.quarkus:quarkus-oidc")
     implementation("io.quarkus:quarkus-mutiny")
     implementation("io.quarkus:quarkus-infinispan-client")
     compileOnly("org.infinispan.protostream:protostream-processor:4.4.1.Final")

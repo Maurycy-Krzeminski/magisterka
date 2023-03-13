@@ -19,7 +19,7 @@ class EquationResource(
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("User")
+    @RolesAllowed("user", "admin")
     suspend fun solve(aInput: EquationInput?): EquationAnswer {
         return aInput?.let { equationService.solve(aInput = it) } ?: throw EquationInputNullException()
     }
