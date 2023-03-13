@@ -2,6 +2,7 @@ package org.maurycy.framework.dsa.resource
 
 import io.quarkus.test.common.http.TestHTTPEndpoint
 import io.quarkus.test.junit.QuarkusTest
+import io.quarkus.test.security.TestSecurity
 import io.restassured.RestAssured
 import java.io.File
 import javax.ws.rs.core.MediaType
@@ -17,6 +18,7 @@ class StoreResourceTest {
 
 
     @Test
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun uploadFileFailedWhenEmpty() {
         RestAssured.given()
             .`when`().post()
@@ -28,6 +30,7 @@ class StoreResourceTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["test.txt", "test.doc", "test.docx", "test.pdf"])
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun uploadFile(fileName: String) {
         val file = File(
             javaClass.classLoader.getResource(fileName)?.file ?: fail("File $fileName not found in resource directory")
@@ -51,6 +54,7 @@ class StoreResourceTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["test.txt", "test.doc", "test.docx", "test.pdf"])
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun downloadFile(fileName: String) {
         val file = File(
             javaClass.classLoader.getResource(fileName)?.file ?: fail("File $fileName not found in resource directory")
@@ -70,6 +74,7 @@ class StoreResourceTest {
     }
 
     @Test
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun getAll() {
         RestAssured.given()
             .`when`().get()
@@ -82,6 +87,7 @@ class StoreResourceTest {
     }
 
     @Test
+    @TestSecurity(user = "testUser", roles = ["admin","user"])
     fun searchForFile() {
         //TODO: TEST searching capabilities and indexes based on current knowledge indexes created for non .txt files are created in a wrong manner
     }
